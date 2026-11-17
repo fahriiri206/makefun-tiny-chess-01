@@ -7,7 +7,7 @@
 An original 0x88 chess engine in Python's standard library, packed into
 4 KB. It plays the house gauntlet through `$MAKEFUN_ENV_URL`.
 
-- `main.py`: the packed entrypoint (4,028 bytes), `SPDX-License-Identifier: MIT`.
+- `main.py`: the packed entrypoint (4,088 bytes), `SPDX-License-Identifier: MIT`.
 - `engine.py`: the readable source it is packed from (not shipped at runtime).
 
 ## Run
@@ -27,13 +27,17 @@ The search is negamax with alpha-beta, principal variation search, null-move
 pruning, late move reductions counted over legal moves, quiescence that also
 tracks repeated positions and is capped at 48 plies, a transposition table
 with depth and bound flags, killer and history move ordering, and material
-plus piece-square evaluation. Every make/unmake and history push is unwound
+plus piece-square evaluation. The king is scored separately: its distance from
+the centre is interpolated by board material, so a sheltered king is preferred
+while pieces are on and the king centralises once they are gone. Every
+make/unmake and history push is unwound
 through try/finally, so a node-budget stop leaves the board exactly as it
 was found. Perft is
 exact on the six standard positions (startpos, Kiwipete, positions 3-6) at
-depths 1-4. Measured cost in the build environment: 0.9-2.4 s per move at
-60,000 nodes, worst case 2.4 s, and identical best moves on repeated searches
-of the same position.
+depths 1-4. Measured cost in the build environment: 1.0-3.4 s per move at
+60,000 nodes, worst case 3.4 s, and identical best moves on repeated searches
+of the same position. A full six-game practice trial on the previous build
+took 530.6 s of the 1,800 s budget.
 
 ## License
 
